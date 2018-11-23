@@ -128,6 +128,7 @@
             <input id="unlock_type_button" type="button" value="Unlock" tabindex="-1" title="Stop annotating with the locked type"/>
             <!--<input id="undo_button" type="button" class="login" value="Undo" tabindex="-1"/>-->
             <input id="options_button" type="button" value="Options" tabindex="-1" title="Set Visual, Annotation and Network Options"/>
+            <input id="autoannotate_button" type="button" value="Auto-annotate" tabindex="-1" title="Paste and auto-annotate 'Materials and Methods' section of a systematic review"/>
           </div>
           <!-- Dummy span, fixes visual glitch (issue #535). TODO: better fix -->
           <span class="document_edit_time unselectable">&nbsp;</span>
@@ -240,6 +241,18 @@
         </fieldset>
       </div>
     </form>
+    <!-- Autoannotate dialog -->
+    <form id="autoannotate_form" class="dialog" title="Auto-annotation">
+      <!-- Data dialog export section -->
+      <fieldset class="small-buttons">
+        <legend>Fragment to annotate</legend>
+        <textarea  rows="20" id="autoannotate_text" placeholder="Please paste the 'Materials and Methods' section here" class="borderless"/>
+      </fieldset>
+      <fieldset class="small-buttons">
+        <legend>File name</legend>
+        <input id="autoannotate_file" placeholder="Enter the name of the result file (unique, no extension)" class="borderless"/>
+      </fieldset>
+    </form>    
     <!-- Options dialog -->
     <form id="options_form" class="dialog" title="Options">
       <fieldset id="options_form_visual">

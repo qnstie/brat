@@ -1415,6 +1415,47 @@ var VisualizerUI = (function($, window, undefined) {
       });
 
       /* END data dialog - related */
+        
+        
+      /* START autoannotate dialog - related */
+
+      var autoannotateForm = $('#autoannotate_form');
+      var autoannotateFormSubmit = function(evt) {
+        dispatcher.post('hideForm');
+        var _txt = $('#autoannotate_text').val();
+        var _file = $('#autoannotate_file').val();
+        dispatcher.post('ajax', [{
+            action: 'autoannotate',
+            text: _txt,
+            file: _file,
+          },
+          function(response) {
+              if (response.exception) {
+                dispatcher.post('showForm', [autoannotateForm]);
+                alert("ERROR: " + response.exception)
+                $('#autoannotate_text').select().focus();
+              } else {
+                $('#autoannotate_text').val('');
+                $('#autoannotate_file').val('');
+
+                dispatcher.post('allowReloadByURL');
+                dispatcher.post('setDocument', [_file]);
+              }
+          }]);
+
+          return false;
+      };
+      autoannotateForm.submit(autoannotateFormSubmit);
+      initForm(autoannotateForm, {
+          width: '90%',
+          height: 600,
+          resizable: true,
+          no_cancel: false
+      });
+      $('#autoannotate_button').click(function() {
+        dispatcher.post('showForm', [autoannotateForm]);
+      });
+      /* END autoannotate dialog - related */
 
 
       /* START options dialog - related */
@@ -2069,7 +2110,7 @@ var VisualizerUI = (function($, window, undefined) {
             // Configuration.rapidModeOn = storedConf.rapidModeOn == "true";
             // Configuration.confirmModeOn = storedConf.confirmModeOn == "true";
             // Configuration.autorefreshOn = storedConf.autorefreshOn == "true";
-            if (Configuration.autorefreshOn) {
+            if (typeof Configuration !== 'undefined' && Configuration.autorefreshOn) {
               checkForDocumentChanges();
             }
             // Configuration.visual.margin.x = parseInt(storedConf.visual.margin.x);
@@ -2191,7 +2232,7 @@ var VisualizerUI = (function($, window, undefined) {
         documentChangesTimer = setTimeout(checkForDocumentChanges, documentChangesTimeout);
       }
 
-      if (Configuration.autorefreshOn) {
+      if (typeof Configuration !== 'undefined' && Configuration.autorefreshOn) {
         checkForDocumentChanges();
       }
 

@@ -19,6 +19,7 @@ from annlog import log_annotation
 from annotator import (create_arc, create_span, delete_arc, delete_span,
                        reverse_arc, split_span)
 from auth import NotAuthorisedError, login, logout, whoami
+from autoannotate import autoannotate
 from common import ProtocolError
 from convert.convert import convert
 from delete import delete_collection, delete_document
@@ -61,6 +62,8 @@ DISPATCHER = {
     'login': login,
     'logout': logout,
     'whoami': whoami,
+
+    'autoannotate': autoannotate,
 
     'createSpan': create_span,
     'deleteSpan': delete_span,

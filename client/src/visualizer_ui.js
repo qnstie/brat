@@ -1423,23 +1423,27 @@ var VisualizerUI = (function($, window, undefined) {
       var autoannotateFormSubmit = function(evt) {
         dispatcher.post('hideForm');
         var _txt = $('#autoannotate_text').val();
-        var _file = $('#autoannotate_file').val();
+        var _document = $('#autoannotate_document').val();
+        var _overwrite = $('#autoannotate_overwrite').is(':checked');
         dispatcher.post('ajax', [{
             action: 'autoannotate',
             text: _txt,
-            file: _file,
+            document: _document,
+            collection: lastGoodCollection,
+            overwrite: _overwrite
           },
           function(response) {
-              if (response.exception) {
+              if (response.result != "success") {
                 dispatcher.post('showForm', [autoannotateForm]);
-                alert("ERROR: " + response.exception)
                 $('#autoannotate_text').select().focus();
+                alert("ERROR: " + response.error);
               } else {
                 $('#autoannotate_text').val('');
-                $('#autoannotate_file').val('');
+                $('#autoannotate_document').val('');
+                $('#autoannotate_overwrite').prop('checked', false);
 
                 dispatcher.post('allowReloadByURL');
-                dispatcher.post('setDocument', [_file]);
+                dispatcher.post('setDocument', [_document]);
               }
           }]);
 

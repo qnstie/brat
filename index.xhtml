@@ -246,11 +246,15 @@
       <!-- Data dialog export section -->
       <fieldset class="small-buttons">
         <legend>Fragment to annotate</legend>
-        <textarea  rows="20" id="autoannotate_text" placeholder="Please paste the 'Materials and Methods' section here" class="borderless"/>
+        <textarea  rows="18" id="autoannotate_text" placeholder="Please paste the 'Materials and Methods' section here" class="borderless"/>
       </fieldset>
       <fieldset class="small-buttons">
-        <legend>File name</legend>
-        <input id="autoannotate_file" placeholder="Enter the name of the result file (unique, no extension)" class="borderless"/>
+        <legend>Document ID</legend>
+        <input id="autoannotate_document" placeholder="Enter the name (ID) of the output document" class="borderless"/>
+      </fieldset>
+      <fieldset class="small-buttons">
+        <legend>Document name conflict resolution</legend>
+        <input type="checkbox" id="autoannotate_overwrite" name="Overwrite"/> Overwrite existing document
       </fieldset>
     </form>    
     <!-- Options dialog -->

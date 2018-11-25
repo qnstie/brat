@@ -51,9 +51,9 @@ var URLMonitor = (function($, window, undefined) {
         }
       };
 
-      var setDocument = function(doc, args) {
+      var setDocument = function(doc, args, force) {
         var oldDoc = that.url_hash.document;
-        if (oldDoc !== doc) {
+        if (oldDoc !== doc || force) {
           changed = true;
           that.url_hash.setDocument(doc);
           dispatcher.post('docChanged', [doc, oldDoc]);

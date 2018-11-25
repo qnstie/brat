@@ -9,21 +9,46 @@ Version:    2018-11-24
 """
 
 import os
+import requests
 from document import real_directory
 from docimport import (DATA_DIR, InvalidDirError, isdir, isfile,
                        NoWritePermissionError, TEXT_FILE_SUFFIX, JOINED_ANN_FILE_SUFF,
                        FileExistsError, open_textfile, join_path)
 
+api_url = "http://srie.app.qnstie.com/"
+
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
 
 def autoannotate(text, collection, document, overwrite = 'false'):
-    """
-    1. HERE GOES CALL TO A REMOTE SERVICE TO PREPARE ANNOTATIONS
-    """
-    ann_text = "T1	Protein 0 7	Protein"
+    data = {
+        'text': text,
+        'document': document
+    }
 
-    json_dic = {}
+# Check file write permissions and if overwriting is allowed:
+    try:
+        save_file(text, '', collection, document, str2bool(overwrite), True)
+    except Exception as e:
+        return {
+            'result': 'error',
+            'error': type(e).__name__,
+            'message': str(e)
+        }
+
+    res = requests.post(api_url, json=data)
+
+    if res.status_code != 200:
+        json_dic = {
+            'result': 'error',
+            'error': "Annotation service error",
+            'message': res.text
+        }
+        return json_dic
+
+    jr = res.json()
+
+    ann_text = jr['ann_text']
     try:
         json_dic = save_file(text, ann_text, collection, document, str2bool(overwrite))
     except Exception as e:
@@ -36,7 +61,7 @@ def autoannotate(text, collection, document, overwrite = 'false'):
     return json_dic
 
 
-def save_file(text, ann_text, collection, docid, do_overwrite):
+def save_file(text, ann_text, collection, docid, do_overwrite, test_mode = False):
     '''
     A modified procedure taken from docimport.py
     '''
@@ -67,6 +92,10 @@ def save_file(text, ann_text, collection, docid, do_overwrite):
         for path in (txt_path, ann_path):
             if isfile(path):
                 raise FileExistsError(path)
+
+    if test_mode:
+        return {'result': 'success', 'document': docid}
+
 
     # Make sure we have a valid POSIX text file, i.e. that the
     # file ends in a newline.

@@ -1425,6 +1425,7 @@ var VisualizerUI = (function($, window, undefined) {
         var _txt = $('#autoannotate_text').val();
         var _document = $('#autoannotate_document').val();
         var _overwrite = $('#autoannotate_overwrite').is(':checked');
+        $('body').addClass("loading");
         dispatcher.post('ajax', [{
             action: 'autoannotate',
             text: _txt,
@@ -1433,6 +1434,7 @@ var VisualizerUI = (function($, window, undefined) {
             overwrite: _overwrite
           },
           function(response) {
+              $('body').removeClass("loading");
               if (response.result != "success") {
                 dispatcher.post('showForm', [autoannotateForm]);
                 $('#autoannotate_text').select().focus();
@@ -1443,7 +1445,7 @@ var VisualizerUI = (function($, window, undefined) {
                 $('#autoannotate_overwrite').prop('checked', false);
 
                 dispatcher.post('allowReloadByURL');
-                dispatcher.post('setDocument', [_document]);
+                dispatcher.post('setDocument', [_document, null, true]);
               }
           }]);
 

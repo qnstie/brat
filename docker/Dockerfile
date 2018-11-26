@@ -9,20 +9,21 @@ MAINTAINER Pawel Kunstman <pawel.kunstman@evidenceprime.com>
 RUN apt-get update
 RUN apt-get install -y curl vim sudo wget rsync
 RUN apt-get install -y apache2
-RUN apt-get install -y python
+RUN apt-get install -y python3 python3-pip
 RUN apt-get install -y supervisor
 RUN apt-get clean
 RUN apt-get install unzip
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pip install requests
+RUN pip3 install requests filelock
 
 # Fetch  brat
-RUN mkdir /var/www
-RUN curl https://github.com/qnstie/brat/archive/master.zip > /var/www/brat.zip 
-RUN cd /var/www && unzip brat.zip
-RUN mv brat-master/ brat && cd brat
+RUN mkdir /var/www/brat
+RUN cd /tmp && curl -LOk https://github.com/qnstie/brat/archive/master.zip && ls -l /tmp
+RUN cd /tmp && unzip master.zip
+RUN mv /tmp/brat-master/* /var/www/brat/
 
+RUN cd /var/www/brat
 # create a symlink so users can mount their data volume at /bratdata rather than the full path
 RUN mkdir /bratdata && mkdir /bratcfg
 RUN chown -R www-data:www-data /bratdata /bratcfg 
@@ -36,6 +37,8 @@ VOLUME /bratcfg
 
 ADD brat_install_wrapper.sh /usr/bin/brat_install_wrapper.sh
 RUN chmod +x /usr/bin/brat_install_wrapper.sh
+
+RUN mkdir /var/www/brat/work && touch /var/www/brat/work/server.log
 
 # Make sure apache can access it
 RUN chown -R www-data:www-data /var/www/brat/

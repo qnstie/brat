@@ -15,7 +15,7 @@ from docimport import (DATA_DIR, InvalidDirError, isdir, isfile,
                        NoWritePermissionError, TEXT_FILE_SUFFIX, JOINED_ANN_FILE_SUFF,
                        FileExistsError, open_textfile, join_path)
 
-api_url = "http://srie.app.qnstie.com/"
+api_url = "http://hetzner.qnstie.com:3002/"
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")

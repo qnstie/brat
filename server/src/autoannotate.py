@@ -102,11 +102,11 @@ def save_file(text, ann_text, collection, docid, do_overwrite, test_mode = False
     if text != "" and text[-1] != '\n':
         text = text + '\n'
 
-    with open_textfile(txt_path, 'w') as txt_file:
+    with open_textfile(txt_path, 'w', encoding="utf8") as txt_file:
         txt_file.write(text)
 
     # Touch the ann file so that we can edit the file later
-    with open(ann_path, 'w') as ann_file:
+    with open_textfile(ann_path, 'w') as ann_file:
         ann_file.write(ann_text)
 
     return {'result': 'success',

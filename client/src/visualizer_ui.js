@@ -1445,7 +1445,7 @@ var VisualizerUI = (function($, window, undefined) {
                 $('#autoannotate_overwrite').prop('checked', false);
 
                 dispatcher.post('allowReloadByURL');
-                dispatcher.post('setDocument', [_document, null, true]);
+                dispatcher.post('setDocument', [response.document, null, true]);
               }
           }]);
 

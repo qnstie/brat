@@ -14,11 +14,21 @@ from document import real_directory
 from docimport import (DATA_DIR, InvalidDirError, isdir, isfile,
                        NoWritePermissionError, TEXT_FILE_SUFFIX, JOINED_ANN_FILE_SUFF,
                        FileExistsError, open_textfile, join_path)
+import re
+import unicodedata
+
 
 api_url = "http://hetzner.qnstie.com:3002/"
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
+
+# The following function is taken from Django and modified for better-looking strings:
+def slugify(value):
+    value = str(value)
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = re.sub(r'[^\w\s-]', '-', value).strip().lower()
+    return re.sub(r'[-\s]+', '-', value)
 
 def autoannotate(text, collection, document, overwrite = 'false'):
     data = {
@@ -65,6 +75,8 @@ def save_file(text, ann_text, collection, docid, do_overwrite, test_mode = False
     '''
     A modified procedure taken from docimport.py
     '''
+
+    docid = slugify(docid)
 
     directory = collection
 
